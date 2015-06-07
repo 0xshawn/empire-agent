@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='Empire-Agent',
-      version='0.0.1',
+      version='0.0.2',
       description='Empire Agent',
       url='http://github.com/wenxer/empire-agent',
       author='Shown Tien',
