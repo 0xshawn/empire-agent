@@ -1,2 +1,2 @@
-# mmsync
-sync from mongo to mysql
+# Empire Agent
+version 0.0.1
