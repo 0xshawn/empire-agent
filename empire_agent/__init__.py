@@ -20,15 +20,10 @@ def launch(config):
 
         # run tasks
         # run all task (including old tasks) & save result
-        tasks.run_and_save_result()
+        tasks.handle_tasks()
 
         # send result to center
-        if tasks.send_back_result() is False:
-            times = 1;
-            while (times < 10):
-                sleep(10 + 2 * 10)
-                if tasks.send_again():
-                    break
+        tasks.send_back_result()
 
         # set interval for next run
         interval = tasks.get_interval()
