@@ -9,7 +9,7 @@ config = Config('/etc/empire-agent.json')
 pid_file = config.pid_file # get pid file path
 empire = EmpireAgent(pid_file)
 
-#empire.run(config)
+# empire.run(config)
 
 if os.path.isfile(pid_file):
     empire.stop()
