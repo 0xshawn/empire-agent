@@ -36,11 +36,13 @@ class Task(object):
             self.tasks = []
             if os.path.isfile(self.config.cache_file):
                 try:
-                    self.tasks = self.load_obj(self.config.cache_file)
+                    self.unfinished_tasks = self.load_obj(self.config.cache_file)
                 except:
                     print 'load object from file error'
-            for task in response:
-                self.tasks.append(task)
+            self.tasks.extend(self.unfinished_tasks)
+            self.tasks.extend(response)
+            self.unfinished_tasks = []
+
         except Exception as inst:
             print '----FAIL----'
             print type(inst)
@@ -57,14 +59,13 @@ class Task(object):
         return True
 
     def run_command(self, task):
+        # TODO: handle task run fail
         """run command"""
         file = task.get('file', None)
         finished = task.get('finished', None)
         if file:
             (output, err) = subprocess.Popen(task['file'], stdout=subprocess.PIPE, shell=True).communicate()
-        task['result'] = output
-        self.save_obj(self.tasks, self.config.cache_file)
-        self.tasks
+            task['result'] = output
         return True
 
     def send_back_result(self):
@@ -79,22 +80,9 @@ class Task(object):
             print response.status_code
             if(response.status_code is 200):
                 print 'remove task'
-                self.tasks.remove(task)
             else:
                 self.unfinished_tasks.append(task)
-        for task in self.tasks:
-            print '----------------------------------------'
-            print task
-            print '----------------------------------------'
-            data = {"_id": task['_id'], 'result': task['result']}
-            headers = {'Content-type': 'application/json'}
-            url = "http://" + self.config.server + "/api/tasks/" + task['_id']
-            response = requests.patch(url, data=json.dumps(data), headers=headers)
-            print response.status_code
-            if(response.status_code is 200):
-                print 'remove task'
-                self.tasks.remove(task)
-        self.save_obj(self.tasks, self.config.cache_file)
+        self.save_obj(self.unfinished_tasks, self.config.cache_file)
         print 'sent_back_result'
         print len(self.tasks)
         return True
