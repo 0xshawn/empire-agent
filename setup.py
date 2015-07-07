@@ -10,4 +10,8 @@ setup(name='Empire-Agent',
       author_email='hightian@gmail.com',
       license='MIT',
       packages=['empire_agent'],
-      zip_safe=False)
+      zip_safe=False,
+      entry_points={
+          'console_scripts': [
+              'empire = empire_agent.empire:main'],
+      })
