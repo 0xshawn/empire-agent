@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from empire_agent import EmpireAgent
-from empire_agent import Config
+from empire_agent.config import Config
 import os
 
 config = Config('/etc/empire-agent.json')
-pid_file = config.pid_file # get pid file path
+pid_file = config.pid_file  # get pid file path
 empire = EmpireAgent(pid_file)
 
-# empire.run(config)
+empire.run(config)
 
-if os.path.isfile(pid_file):
-    empire.stop()
-else:
-    empire.start(config)
+# if os.path.isfile(pid_file):
+#    empire.stop()
+# else:
+#    empire.start(config)

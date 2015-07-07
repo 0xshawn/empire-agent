@@ -12,11 +12,13 @@ import pickle
 import requests
 import os.path
 
+
 class Task(object):
+
     def __init__(self, config):
         self.config = config
-        self.tasks = [];
-        self.unfinished_tasks = [];
+        self.tasks = []
+        self.unfinished_tasks = []
 
     def get_updates(self):
         """get update and save to self.tasks"""
@@ -29,14 +31,15 @@ class Task(object):
         start = time()
         req = False
         try:
-            req = urllib2.urlopen(request_tasks_url, timeout = 3)
+            req = urllib2.urlopen(request_tasks_url, timeout=3)
             response = json.load(req)
             end = time()
             print 'duration: ', int(end - start)
             self.tasks = []
             if os.path.isfile(self.config.cache_file):
                 try:
-                    self.unfinished_tasks = self.load_obj(self.config.cache_file)
+                    self.unfinished_tasks = self.load_obj(
+                        self.config.cache_file)
                 except:
                     print 'load object from file error'
             self.tasks.extend(self.unfinished_tasks)
@@ -64,7 +67,8 @@ class Task(object):
         file = task.get('file', None)
         finished = task.get('finished', None)
         if file:
-            (output, err) = subprocess.Popen(task['file'], stdout=subprocess.PIPE, shell=True).communicate()
+            (output, err) = subprocess.Popen(
+                task['file'], stdout=subprocess.PIPE, shell=True).communicate()
             task['result'] = output
         return True
 
@@ -76,7 +80,8 @@ class Task(object):
             data = {"_id": task['_id'], 'result': task['result']}
             headers = {'Content-type': 'application/json'}
             url = "http://" + self.config.server + "/api/tasks/" + task['_id']
-            response = requests.patch(url, data=json.dumps(data), headers=headers)
+            response = requests.patch(
+                url, data=json.dumps(data), headers=headers)
             print response.status_code
             if(response.status_code is 200):
                 print 'remove task'

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from time import sleep
-from .daemon import Daemon
-from .config import Config
-from .task import Task
+from . import command
+from . import config
+from . import db
+from . import log
+from . import network
+from . import security
+from .system import *
 
-import subprocess
-import requests
-import urllib2
-import json
+from time import sleep
 
 def launch(config):
     interval = config.interval
@@ -30,6 +30,6 @@ def launch(config):
         tasks.set_interval(interval)
         tasks.sleep()
 
-class EmpireAgent(Daemon):
+class EmpireAgent(system.daemon.Daemon):
     def run(self, config):
         launch(config)
