@@ -5,22 +5,27 @@
 """
 
 from time import sleep
+from .task import Task
 
 
 class Eventloop(object):
 
     def __init__(self, config):
         self.config = config
-        self.unfinished = []
-        self.finished = []
+
+        self.task = Task(self.config)
+
+        self.unfinished_tasks = []
+        self.finished_tasks = []
 
     def check_for_updates(self):
         """
         Check for new update and sync to local DB
         """
+        # self.unfinished = task.
         pass
 
-    def handle_tasks(self):
+    def handle(self):
         """
         Execute the tasks on localhost
         """
@@ -43,6 +48,6 @@ class Eventloop(object):
     def event_loop(self):
         while(True):
             self.check_for_updates()
-            self.handle_tasks()
+            self.handle()
             self.send_back_data()
             self.sleep()

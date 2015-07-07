@@ -15,12 +15,14 @@ def main():
     pid_file = config.pid_file
     empire = EmpireAgent(pid_file)
 
-    empire.run(config)
-
-    # if os.path.isfile(pid_file):
-    #     empire.stop()
-    # else:
-    #     empire.start(config)
+    # whether daemon or not
+    if config.debug:
+        empire.run(config)
+    else:
+        if os.path.isfile(pid_file):
+            empire.stop()
+        else:
+            empire.start(config)
 
 
 if __name__ == '__main__':
