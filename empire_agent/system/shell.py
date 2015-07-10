@@ -3,3 +3,6 @@
 """
     Shell related
 """
+
+def parse_args():
+    pass
