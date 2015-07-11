@@ -30,28 +30,23 @@ class Task(object):
         print 'start request'
         start = time()
         req = False
-        try:
-            req = urllib2.urlopen(request_tasks_url, timeout=3)
+        req = Task.get(request_tasks_url)
+        if (req is not None):
             response = json.load(req)
-            end = time()
-            print 'duration: ', int(end - start)
-            self.tasks = []
-            if os.path.isfile(self.config.cache_file):
-                try:
-                    self.unfinished_tasks = self.load_obj(
-                        self.config.cache_file)
-                except:
-                    print 'load object from file error'
-            self.tasks.extend(self.unfinished_tasks)
-            self.tasks.extend(response)
-            self.unfinished_tasks = []
 
-        except Exception as inst:
-            print '----FAIL----'
-            print type(inst)
-            print inst.args
-            print inst
-            traceback.print_exc()
+        print 'duration: ', int(end - start)
+
+        self.tasks = []
+        if os.path.isfile(self.config.cache_file):
+            try:
+                self.unfinished_tasks = self.load_obj(
+                    self.config.cache_file)
+            except:
+                print 'load object from file error'
+        self.tasks.extend(self.unfinished_tasks)
+        if response:
+            self.tasks.extend(response)
+        self.unfinished_tasks = []
 
     def handle_tasks(self):
         pool = ThreadPool(10)
