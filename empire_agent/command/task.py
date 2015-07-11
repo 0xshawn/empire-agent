@@ -12,11 +12,13 @@ import pickle
 import requests
 import os.path
 
+
 class Task(object):
+
     def __init__(self, config):
         self.config = config
-        self.tasks = [];
-        self.unfinished_tasks = [];
+        self.tasks = []
+        self.unfinished_tasks = []
 
     def get_updates(self):
         """get update and save to self.tasks"""
@@ -28,27 +30,23 @@ class Task(object):
         print 'start request'
         start = time()
         req = False
-        try:
-            req = urllib2.urlopen(request_tasks_url, timeout = 3)
+        req = Task.get(request_tasks_url)
+        if (req is not None):
             response = json.load(req)
-            end = time()
-            print 'duration: ', int(end - start)
-            self.tasks = []
-            if os.path.isfile(self.config.cache_file):
-                try:
-                    self.unfinished_tasks = self.load_obj(self.config.cache_file)
-                except:
-                    print 'load object from file error'
-            self.tasks.extend(self.unfinished_tasks)
-            self.tasks.extend(response)
-            self.unfinished_tasks = []
 
-        except Exception as inst:
-            print '----FAIL----'
-            print type(inst)
-            print inst.args
-            print inst
-            traceback.print_exc()
+        print 'duration: ', int(end - start)
+
+        self.tasks = []
+        if os.path.isfile(self.config.cache_file):
+            try:
+                self.unfinished_tasks = self.load_obj(
+                    self.config.cache_file)
+            except:
+                print 'load object from file error'
+        self.tasks.extend(self.unfinished_tasks)
+        if response:
+            self.tasks.extend(response)
+        self.unfinished_tasks = []
 
     def handle_tasks(self):
         pool = ThreadPool(10)
@@ -64,7 +62,8 @@ class Task(object):
         file = task.get('file', None)
         finished = task.get('finished', None)
         if file:
-            (output, err) = subprocess.Popen(task['file'], stdout=subprocess.PIPE, shell=True).communicate()
+            (output, err) = subprocess.Popen(
+                task['file'], stdout=subprocess.PIPE, shell=True).communicate()
             task['result'] = output
         return True
 
@@ -76,7 +75,8 @@ class Task(object):
             data = {"_id": task['_id'], 'result': task['result']}
             headers = {'Content-type': 'application/json'}
             url = "http://" + self.config.server + "/api/tasks/" + task['_id']
-            response = requests.patch(url, data=json.dumps(data), headers=headers)
+            response = requests.patch(
+                url, data=json.dumps(data), headers=headers)
             print response.status_code
             if(response.status_code is 200):
                 print 'remove task'

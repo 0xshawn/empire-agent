@@ -1,0 +1,10 @@
+
+Inbox:
+ ☐ 通过environment.py 来处理当前运行环境
+ ☐ put shell.py out of folder `core`
+ ☐ API的版本控制，由服务器决定，资源的请求路径也有API中提供的信息决定
+ ☐ Request 重构为RestfulAPI
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ shell.py 更改为处理命令行参数等功能，非命令本身 @done (15-07-08 00:59) @project(Inbox)
