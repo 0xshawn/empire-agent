@@ -89,7 +89,6 @@ class Task(object):
 
     def get_interval(self):
         return 10
-        return self.config.interval
 
     def set_interval(self, interval):
         self.config.interval = int(interval)
