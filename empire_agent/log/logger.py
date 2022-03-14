@@ -14,10 +14,8 @@ class Log(object):
         if not os.path.exists(log_path):
             os.makedirs(log_path)
 
-        logging.basicConfigfilename = log_path + 'empire-agent.log',
+        logging.basicConfigfilename = (f'{log_path}empire-agent.log', )
         format = log_format,
         datefmt = date_format,
         level = logging.DEBUG
-        logger = logging.getLogger()
-
-        return logger
+        return logging.getLogger()

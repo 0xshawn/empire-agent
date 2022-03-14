@@ -52,7 +52,6 @@ class Task(object):
         pool.map(self.run_command, self.tasks)
         pool.close()
         pool.join()
-        pass
 
     def run_command(self, task):
         # TODO: handle task run fail
